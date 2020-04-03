@@ -1,3 +1,4 @@
+require("dotenv").config();
 import * as express from "express";
 import ApiError from "./CustomError";
 import log from "./logger";
