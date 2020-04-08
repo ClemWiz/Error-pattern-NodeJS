@@ -1,15 +1,18 @@
+const { version } = require('./package.json');
 import ApiError from "./CustomError";
 import * as Sentry from "@sentry/node";
 
 Sentry.init({
-    dsn: process.env.SENTRY_DSN
+    dsn: process.env.SENTRY_DSN,
+    release: version
 });
 
 export default function log(error: ApiError) {
     const user = error.data?.user;
     const context = error.data?.context;
     Sentry.withScope(scope => {
-        if (error.level) scope.setLevel(Sentry.Severity.fromString(error.level.toLowerCase()));
+        const level = error.level ? error.level.toLowerCase() : "fatal";
+        scope.setLevel(Sentry.Severity.fromString(level));
         if (user) {
             scope.setUser({
                 id: user.id.toString(10),
