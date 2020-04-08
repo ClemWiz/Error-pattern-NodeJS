@@ -1,9 +1,11 @@
 import Router from 'express-promise-router';
-import { doSomethingWithUser, userDoSomething } from './ctrl';
+import { doSomethingWithUser, userDoSomething, updateUser } from './ctrl';
 
 const router = Router();
 
-router.get('/user/:id', doSomethingWithUser);
+router.route('/user/:id')
+    .get(doSomethingWithUser)
+    .put(updateUser)
 router.get('/user/:id/do/:doable', userDoSomething);
 
 export default router;
