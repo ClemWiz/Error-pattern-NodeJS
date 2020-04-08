@@ -5,14 +5,6 @@ import ApiError from "./CustomError";
 export async function doSomethingWithUser(req: Request, res: Response): Promise<void> {
     // eslint-disable-next-line no-useless-catch
     try {
-        // do some control code
-        if (req.params.id === "fatal") {
-            throw new ApiError(500, "Fatal error", "INTERNAL_ERROR", "FATAL", { context: { userId: req.params.id }});
-        }
-        if (req.params.id === "error") {
-            throw new ApiError(500, "Normal error", "INTERNAL_ERROR", "ERROR", { context: { userId: req.params.id }});
-        }
-        
         const userId = checkUserId(req.params.id);
         const user = await getUser(userId);
         res.status(200).json(user);
@@ -28,9 +20,21 @@ export async function userDoSomething(req: Request, res: Response) {
         const userId = checkUserId(req.params.id);
         const user = await getUser(userId);
         const doable = req.params.doable;
-        if (doable === "illegal") {
-            throw new ApiError(403, "Illegal action", "ILLEGAL_ACTION", "ERROR", { user, context: { do: doable }});
+
+        switch (doable) {
+            case "illegal":
+                throw new ApiError(403, "Illegal action", "ILLEGAL_ACTION", "WARNING", { user, context: { do: doable }});
+
+            case "error":
+                throw new ApiError(500, "Normal error", "INTERNAL_ERROR", "ERROR", { context: { userId: req.params.id }});
+                
+            case "fatal":
+                throw new ApiError(500, "Fatal error", "INTERNAL_ERROR", "FATAL", { context: { userId: req.params.id }});
+                
+            default:
+                break;
         }
+
         res.status(200).json({ ...user, do: doable });
     }
     catch (error) {

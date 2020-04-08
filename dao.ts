@@ -1,6 +1,7 @@
 import ApiError from "./CustomError";
+import { User } from "./models";
 
-export default async function getUserById(userId: number): Promise<{ id: number, name: string, age: number }> {
+export async function getUserById(userId: number): Promise<User> {
     return new Promise((resolve, reject) => {
         if (!userId || userId === 0) {
             const err = new ApiError(404, "User not found", "USER_NOT_FOUND", "INFO");
