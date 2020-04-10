@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const { version } = require('./package.json');
 import ApiError from "./CustomError";
 import * as Sentry from "@sentry/node";
@@ -7,7 +8,7 @@ Sentry.init({
     release: version
 });
 
-export default function log(error: ApiError) {
+export default function log(error: ApiError): void {
     const user = error.data?.user;
     const context = error.data?.context;
     Sentry.withScope(scope => {
