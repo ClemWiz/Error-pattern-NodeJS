@@ -15,7 +15,8 @@ export async function doSomethingWithUser(req: Request, res: Response): Promise<
     }
 }
 
-export async function userDoSomething(req: Request, res: Response) {
+export async function userDoSomething(req: Request, res: Response): Promise<void> {
+    // eslint-disable-next-line no-useless-catch
     try {
         const userId = checkUserId(req.params.id);
         const user = await getUser(userId);
@@ -44,6 +45,7 @@ export async function userDoSomething(req: Request, res: Response) {
 }
 
 function checkUserId(userId: string): number {
+    // eslint-disable-next-line no-useless-catch
     try {
         const parsedId = parseInt(userId, 10);
     
