@@ -1,13 +1,8 @@
-import getUserById from "./dao"
+import { getUserById } from "./dao";
+import { User } from "./models";
 
-export async function getUser(id: number) {
-    // eslint-disable-next-line no-useless-catch
-    try {
+export async function getUser(id: number): Promise<User> {
         const user = await getUserById(id);
         // do some logic with user here
         return user;
-    }
-    catch (error) {
-        throw error;
-    }
 }

@@ -1,4 +1,10 @@
 import app from "./app";
+import cron from './cron';
+
+/*
+ * START CRON
+ */
+cron();
 
 /*
  * START SERVER
