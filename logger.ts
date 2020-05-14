@@ -10,10 +10,12 @@ Sentry.init({
 
 export default function log(error: ApiError): void {
     const user = error.data?.user;
+    const type = error.data?.type ? error.data?.type : "unknown";
     const context = error.data?.context;
-    Sentry.withScope(scope => {
+    return Sentry.withScope(scope => {
         const level = error.level ? error.level.toLowerCase() : "fatal";
         scope.setLevel(Sentry.Severity.fromString(level));
+        scope.setTag("type", type);
         if (user) {
             scope.setUser({
                 id: user.id.toString(10),
@@ -22,6 +24,5 @@ export default function log(error: ApiError): void {
         }
         if (context) scope.setExtra("context", context);
         Sentry.captureException(error);
-    })
-    return;
+    });
 }
